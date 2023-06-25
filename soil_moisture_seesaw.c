@@ -24,7 +24,7 @@ const uint8_t TOUCH_CHANNEL_OFFSET = 0x10;  // Moisture sensor register offset
 void seesaw_sw_reset(i2c_inst_t* i2c) {
     uint8_t reset_bytes[3] = {0x00, 0xFF, 0xFF};
 
-    i2c_write_blocking(i2c0, 0x36, reset_bytes, 3, false);
+    i2c_write_blocking(i2c, I2C_ADDR, reset_bytes, 3, false);
 }
 
 /**
@@ -36,14 +36,14 @@ void seesaw_sw_reset(i2c_inst_t* i2c) {
 uint16_t seesaw_read_moisture(i2c_inst_t* i2c) {
     // Request data from moisture sensor registers
     uint8_t write_bytes[2] = {TOUCH_BASE, TOUCH_CHANNEL_OFFSET};
-    i2c_write_blocking(i2c0, 0x36, write_bytes, 2, false);
+    i2c_write_blocking(i2c, I2C_ADDR, write_bytes, 2, false);
 
     sleep_ms(200);
 
     uint8_t buff[2];
 
     // Read soil moisture data
-    i2c_read_blocking(i2c0, I2C_ADDR, buff, 2, false);
+    i2c_read_blocking(i2c, I2C_ADDR, buff, 2, false);
 
     return ((uint16_t)buff[0] << 8) | buff[1];
 }
